@@ -32,6 +32,13 @@
           </p>
           <div class="course-actions pa-1">
             <p class="badge keep-left bold">FREE</p>
+            <form action="{% url 'cursos.like.curso' curso.id %}" method="POST">{% csrf_token %}
+              <span class="curso-like">
+                <button class="btn-like like" type="submit"><i class="fa-solid fa-heart"></i>
+                </button>
+                <strong class="likes"> 0</strong>
+              </span>
+            </form>
             <span>{{ curso.autor.nome }}</span>
             <button class="btn btn-primary">Iniciar</button>
           </div>

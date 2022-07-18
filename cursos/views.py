@@ -1,8 +1,8 @@
-from django.shortcuts import reverse, render
+from django.shortcuts import get_object_or_404, render, reverse
 from django.views.generic.edit import CreateView, UpdateView
 
-from .models import Curso
 from .forms import CursoModelForm
+from .models import Curso, CursoLikes
 
 
 def pagina_inicial(request):
@@ -25,6 +25,14 @@ def listar_aulas(request, pk):
         "aulas": curso.aulas.all()
     }
     return render(request, 'cursos/listar_aulas.html', context)
+
+
+def like_curso(request, pk):
+    curso = get_object_or_404(Curso, pk=pk)
+    CursoLikes.objects.create(user=request.user, curso=curso)
+    return render(request, "cursos/like_concluido.html", {
+        'cursos': curso
+    })
 
 
 class CursoMixin(object):

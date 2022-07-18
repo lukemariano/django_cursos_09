@@ -8,4 +8,5 @@ urlpatterns = [
     path("novo/", views.NovoCursoView.as_view(), name="cursos.novo"),
     path("alterar/<pk>", views.AlterarCursoView.as_view(), name="cursos.alterar"),
     path('', views.pagina_inicial, name='cursos.inicio'),
+    path('like/<pk>', views.like_curso, name="cursos.like.curso")
 ]

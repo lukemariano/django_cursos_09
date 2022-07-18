@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -14,7 +15,8 @@ class Curso(models.Model):
     nome = models.CharField(max_length=128, unique=True)
     slug = models.SlugField(max_length=256, unique=True, null=True, blank=True)
     descricao = models.TextField()
-    autor = models.ForeignKey("Autor", on_delete=models.SET_NULL, null=True, blank=True, related_name="cursos")
+    autor = models.ForeignKey(
+        "Autor", on_delete=models.SET_NULL, null=True, blank=True, related_name="cursos")
     imagem = models.URLField(max_length=1024, null=True, blank=True)
     ativo = models.BooleanField(default=True)
 
@@ -29,7 +31,8 @@ class Curso(models.Model):
 
 
 class Aula(models.Model):
-    curso = models.ForeignKey("Curso", on_delete=models.CASCADE, related_name="aulas")
+    curso = models.ForeignKey(
+        "Curso", on_delete=models.CASCADE, related_name="aulas")
     nome = models.CharField(max_length=128, unique=True)
     slug = models.SlugField(max_length=256, unique=True, null=True, blank=True)
     descricao = models.TextField(null=True, blank=True)
@@ -41,3 +44,12 @@ class Aula(models.Model):
         if not self.id:
             self.slug = slugify(self.nome)
         super(Aula, self).save(*args, **kwargs)
+
+
+class CursoLikes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
+    data = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [['user', 'curso']]
