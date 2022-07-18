@@ -1,9 +1,7 @@
-from django.contrib.auth import authenticate
-from django.contrib.auth.forms import AuthenticationForm
-
 from django import forms
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 
 
 class UsuarioForm(UserCreationForm):
@@ -31,7 +29,8 @@ class LoginForm(AuthenticationForm, forms.Form):
         password = self.cleaned_data.get("password")
 
         if username and password:
-            self.user_cache = authenticate(username=username, password=password)
+            self.user_cache = authenticate(
+                username=username, password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(self.message_incorrect_password)
             if not self.user_cache.is_active:
